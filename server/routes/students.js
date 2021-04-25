@@ -1,5 +1,5 @@
 import express from 'express';
-import {   } from '../controllers/students';
+import { addStudent, getAllStudents, getSingleStudent, updateStudent, deleteStudent } from '../controllers/students';
 import multer from 'multer';
 
 const storage = multer.diskStorage({
@@ -30,15 +30,16 @@ const upload = multer({
 const router = express.Router();
 
 //manage student
+
+router.get('/', getAllStudents);
+router.get('/:studentId', getSingleStudent);
+router.delete('/:studentId', deleteStudent);
 router.post(
-  '/student', 
-  upload.fields([
-    {name: 'avatarCourse'}, 
-    {name: 'imageNewWords'}, 
-    {name: 'imageGrammar'}, 
-    {name: 'imageHomeWork'}]), 
-  createCourse
+  '/', 
+  upload.fields([{name: 'avatar'}]), 
+  addStudent
 );
+router.patch('/:studentId', upload.fields([{name: 'avatar'}]), updateStudent);
 
 
 export default router;

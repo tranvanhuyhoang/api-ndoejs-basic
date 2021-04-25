@@ -32,20 +32,29 @@ const upload = multer({
 });
 
 const router = express.Router();
-
+const middlewareLogs = function (req, res, next) {
+    console.log('logs')
+    next()
+}
+const middlewareUploadImages = [upload.fields([
+  {name: 'avatarCourse'}, 
+  {name: 'imageNewWords'}, 
+  {name: 'imageGrammar'}, 
+  {name: 'imageHomeWork'}]), middlewareLogs]
 //manage course
 router.post(
   '/courses', 
-  upload.fields([
-    {name: 'avatarCourse'}, 
-    {name: 'imageNewWords'}, 
-    {name: 'imageGrammar'}, 
-    {name: 'imageHomeWork'}]), 
+  middlewareUploadImages, 
   createCourse
 );
 router.get('/courses', getAllCourse);
 router.get('/courses/:courseId', getSingleCourse);
-router.patch('/courses/:courseId', updateCourse);
+router.patch('/courses/:courseId', upload.fields([
+  {name: 'avatarCourse'}, 
+  {name: 'imageNewWords'}, 
+  {name: 'imageGrammar'}, 
+  {name: 'imageHomeWork'}]), 
+  updateCourse);
 router.delete('/courses/:courseId', deleteCourse);
 
 export default router;

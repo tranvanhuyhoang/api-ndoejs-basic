@@ -1,26 +1,27 @@
 import mongoose from 'mongoose';
-import Students from '../models/students';
+import Student from '../models/students';
 
 
 // create new student
 export async function addStudent (req, res) {
-    const student = new Students({
+    const student = new Student({
       _id: mongoose.Types.ObjectId(),
-      title: req.body.title,
-      description: req.body.description,
-      avatarCourse: req.files['avatarCourse'][0].path,
-      imageNewWords: req.files['imageNewWords'][0].path,
-      imageGrammar: req.files['imageGrammar'][0].path,
-      imageHomeWork: req.files['imageHomeWork'][0].path,
+      name: req.body.name,
+      phone: req.body.phone,
+      course: req.body.course,
+      class: req.body.class,
+      time: req.body.time,
+      fee: req.body.fee,
+      avatar: req.files['avatar'][0].path,
     });
       
   return student
     .save()
-    .then((newCourse) => {
+    .then((newStudent) => {
       return res.status(201).json({
         success: true,
         message: 'Thêm sinh viên thành công',
-        Course: newCourse,
+        Student: newStudent,
       });
     })
     .catch((error) => {
@@ -34,76 +35,76 @@ export async function addStudent (req, res) {
 }
 
 // Get all student
-// export function getAllCourse( req, res){
-//   Course.find()
-//     .select('_id title description avatarCourse imageNewWords imageGrammar imageHomeWork')
-//     .then((allCourse) => {
-//       return res.status(200).json({
-//         success: true,
-//         message: 'A list of all course',
-//         Course: allCourse,
-//       });
-//     })
-//     .catch((err) => {
-//       res.status(500).json({
-//         success: false,
-//         message: 'Server error. Please try again.',
-//         error: err.message,
-//       });
-//     });
-// }
+export function getAllStudents( req, res){
+  Student.find()
+    .select('_id name phone course class time fee avatar')
+    .then((allStudents) => {
+      return res.status(200).json({
+        success: true,
+        message: 'success',
+        Student: allStudents,
+      });
+    })
+    .catch((err) => {
+      res.status(500).json({
+        success: false,
+        message: 'Server error. Please try again.',
+        error: err.message,
+      });
+    });
+}
 
 // get single student
-// export function getSingleCourse(req, res) {
-//   const id = req.params.courseId;
-//   Course.findById(id)
-//     .then((singleCourse) => {
-//       res.status(200).json({
-//         success: true,
-//         message: `More on ${singleCourse.title}`,
-//         Course: singleCourse,
-//       });
-//     })
-//     .catch((err) => {
-//       res.status(500).json({
-//         success: false,
-//         message: 'This course does not exist',
-//         error: err.message,
-//       });
-//    });
-// }
+export function getSingleStudent(req, res) {
+  const id = req.params.studentId;
+  Student.findById(id)
+    .then((singleStudent) => {
+      res.status(200).json({
+        success: true,
+        message: `success`,
+        Student: singleStudent,
+      });
+    })
+    .catch((err) => {
+      res.status(500).json({
+        success: false,
+        message: 'This course does not exist',
+        error: err.message,
+      });
+   });
+}
 
 // update student
-// export function updateCourse(req, res) {
-//   const id = req.params.courseId;
-//   const updateObject = req.body;
-//   Course.update({ _id:id }, { $set:updateObject })
-//     .exec()
-//     .then(() => {
-//       res.status(200).json({
-//         success: true,
-//         message: 'Course is updated',
-//         updateCourse: updateObject,
-//       });
-//     })
-//     .catch((err) => {
-//       res.status(500).json({
-//         success: false,
-//         message: 'Server error. Please try again.'
-//       });
-//     });
-// }
+export function updateStudent(req, res) {
+  const id = req.params.studentId;
+  const updateObject = req.body;
+  Student.update({ _id:id }, { $set:updateObject })
+    .exec()
+    .then(() => {
+      res.status(200).json({
+        success: true,
+        message: 'Cập nhật thông tin thành công',
+        updateStudent: updateObject,
+      });
+    })
+    .catch((err) => {
+      res.status(500).json({
+        success: false,
+        message: 'Server error. Please try again.'
+      });
+    });
+}
 
 // delete a student
-// export function deleteCourse(req, res) {
-//   const id = req.params.courseId;
-//   Course.findByIdAndRemove(id)
-//     .exec()
-//     .then(()=> res.status(204).json({
-//       success: true,
-//       message: 'Delete success',
-//     }))
-//     .catch((err) => res.status(500).json({
-//       success: false,
-//     }));
-// }
+export function deleteStudent(req, res) {
+  const id = req.params.studentId;
+  Student.findByIdAndRemove(id)
+    .exec()
+    .then(()=> res.status(200).json({
+      success: true,
+      message: 'Xóa thành công',
+    }))
+    .catch((err) => res.status(500).json({
+      success: false,
+    }));
+}
